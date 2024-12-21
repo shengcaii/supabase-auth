@@ -1,101 +1,156 @@
-import Image from "next/image";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  // Check for authenticated user using getUser()
+  const supabase = await createClient();
+  const { data: { user }, error } = await supabase.auth.getUser();
+
+  // Handle sign in action
+  async function handleSignIn() {
+    'use server'
+    if (user) {
+      // User is authenticated, redirect to dashboard
+      redirect('/dashboard');
+    } else {
+      // No authenticated user, redirect to login
+      redirect('/login');
+    }
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <p>{error?.message}</p> &&
+    <main className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-b from-rose-50 to-white">
+      {/* Hero Section */}
+      <div className="max-w-4xl text-center mb-16">
+        <h1 className="text-5xl font-bold mb-6 text-gray-800">Find Your Perfect Match</h1>
+        <p className="text-xl text-gray-600 mb-8">Connect with like-minded people and discover meaningful relationships</p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        {/* CTA Button */}
+        <form action={handleSignIn}>
+          <button className="bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-8 rounded-full transition-colors">
+            {user ? 'Start Matching' : 'Get Started'}
+          </button>
+        </form>
+      </div>
+
+      {/* Feature Highlights */}
+      <div className="grid md:grid-cols-3 gap-8 max-w-6xl">
+        <div className="text-center p-6">
+          <div className="text-4xl mb-4">💝</div>
+          <h3 className="text-xl font-semibold mb-2">Smart Matching</h3>
+          <p className="text-gray-600">Our algorithm helps you find compatible partners based on your interests and preferences</p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+        <div className="text-center p-6">
+          <div className="text-4xl mb-4">🔒</div>
+          <h3 className="text-xl font-semibold mb-2">Safe & Secure</h3>
+          <p className="text-gray-600">Your privacy and security are our top priorities</p>
+        </div>
+        <div className="text-center p-6">
+          <div className="text-4xl mb-4">💫</div>
+          <h3 className="text-xl font-semibold mb-2">Real Connections</h3>
+          <p className="text-gray-600">Meet authentic people looking for genuine relationships</p>
+        </div>
+      </div>
+
+      {/* 
+      Suggested improvements:
+      1. Add user testimonials section
+      {/* User Testimonials */}
+      <div className="max-w-6xl mt-16">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">What Our Users Say</h2>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="flex items-center mb-4">
+              <div className="w-12 h-12 bg-rose-200 rounded-full flex items-center justify-center">
+                <span className="text-rose-600 font-semibold">SJ</span>
+              </div>
+              <div className="ml-4">
+                <h4 className="font-semibold">Sarah Johnson</h4>
+                <p className="text-gray-500 text-sm">New York, NY</p>
+              </div>
+            </div>
+            <p className="text-gray-600">&quot;I found my soulmate through this platform! The matching algorithm really works. We&apos;ve been together for 2 years now.&quot;</p>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="flex items-center mb-4">
+              <div className="w-12 h-12 bg-rose-200 rounded-full flex items-center justify-center">
+                <span className="text-rose-600 font-semibold">MD</span>
+              </div>
+              <div className="ml-4">
+                <h4 className="font-semibold">Michael Davis</h4>
+                <p className="text-gray-500 text-sm">Los Angeles, CA</p>
+              </div>
+            </div>
+            <p className="text-gray-600">&quot;The focus on genuine connections and safety really sets this platform apart. I&apos;ve met amazing people here.&quot;</p>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="flex items-center mb-4">
+              <div className="w-12 h-12 bg-rose-200 rounded-full flex items-center justify-center">
+                <span className="text-rose-600 font-semibold">EP</span>
+              </div>
+              <div className="ml-4">
+                <h4 className="font-semibold">Emily Parker</h4>
+                <p className="text-gray-500 text-sm">Chicago, IL</p>
+              </div>
+            </div>
+            <p className="text-gray-600">&quot;I appreciate how the platform helps you find matches based on shared interests. It made dating so much more meaningful.&quot;</p>
+          </div>
+        </div>
+      </div>
+      {/* 2. Implement a success stories carousel */}
+      {/* Success Stories Carousel */}
+      <div className="max-w-6xl mt-16">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">Success Stories</h2>
+        <div className="relative">
+          <div className="overflow-hidden">
+            <div className="flex transition-transform duration-500 ease-in-out">
+              <div className="min-w-full p-6">
+                <div className="bg-white rounded-lg shadow-md p-8">
+                  <div className="flex items-center justify-center mb-6">
+                    <img src="/success-couple-1.jpg" alt="Happy Couple" className="w-32 h-32 rounded-full object-cover" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-center mb-4">Mark & Lisa</h3>
+                  <p className="text-gray-600 text-center">
+                    &quot;We matched in June 2021 and got married last summer! We couldn&apos;t be happier and are so grateful for this platform bringing us together.&quot;
+                  </p>
+                  <p className="text-rose-500 text-center mt-4">Together for 2 years</p>
+                </div>
+              </div>
+              <div className="min-w-full p-6">
+                <div className="bg-white rounded-lg shadow-md p-8">
+                  <div className="flex items-center justify-center mb-6">
+                    <img src="/success-couple-2.jpg" alt="Happy Couple" className="w-32 h-32 rounded-full object-cover" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-center mb-4">David & Rachel</h3>
+                  <p className="text-gray-600 text-center">
+                    &quot;From our first message to our wedding day, every moment has been magical. Thank you for helping us find true love!&quot;
+                  </p>
+                  <p className="text-rose-500 text-center mt-4">Together for 3 years</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      {/* 3. Add statistics about successful matches
+      4. Include a brief quiz/questionnaire for better matching
+      5. Add real-time chat preview
+      6. Implement AI-powered compatibility scoring
+      7. Add location-based matching preview
+      */}
+    </main>
+  )
 }
