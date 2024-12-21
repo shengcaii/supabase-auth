@@ -19,7 +19,6 @@ export default async function Home() {
   }
 
   return (
-    <p>{error?.message}</p> &&
     <main className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-b from-rose-50 to-white">
       {/* Hero Section */}
       <div className="max-w-4xl text-center mb-16">
