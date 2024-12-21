@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 export default async function Home() {
   // Check for authenticated user using getUser()
   const supabase = await createClient();
-  const { data: { user }, error } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
   // Handle sign in action
   async function handleSignIn() {
