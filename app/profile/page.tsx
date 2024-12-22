@@ -14,11 +14,12 @@ export default async function Profile() {
     // Fetch existing profile data
     const { data: profile } = await supabase
         .from('profiles')
-        .select('*')
+        .select('username, bio, birthday')
         .eq('user_id', user.id)
         .single()
 
-    const defaultUsername = formatUsername(user?.email || '', {
+    // Profile will always exist due to the trigger
+    const defaultUsername = formatUsername(user.email || '', {
         removeNumbers: true,
         capitalizeWord: true,
         maxLength: 20

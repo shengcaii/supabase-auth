@@ -38,7 +38,7 @@ export function Dialog({
     return (
         <dialog
             ref={dialogRef}
-            className="fixed left-[50%] top-[50%] -translate-x-[55%] -translate-y-[55%] backdrop:bg-foreground/10 backdrop:backdrop-blur-[2.5px] rounded-lg p-0 w-[90vw] md:w-full max-w-md min-h-[200px] shadow-lg border border-muted bg-background"
+            className="fixed left-[50%] top-[50%] -translate-x-[55%] -translate-y-[100%] backdrop:bg-foreground/10 backdrop:backdrop-blur-[2.5px] rounded-lg p-0 w-[90vw] md:w-full max-w-md min-h-[200px] shadow-lg border border-muted bg-background"
             onClose={onClose}
         >
             <div className="p-6 space-y-4">

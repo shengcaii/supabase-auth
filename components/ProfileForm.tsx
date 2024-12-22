@@ -22,7 +22,6 @@ export default function ProfileForm({ userId, initialData }: ProfileFormProps) {
 
     const supabase = createClient()
 
-    // Check if form values have changed from initial values
     useEffect(() => {
         const hasChanges =
             nickname !== initialData.nickname ||
@@ -42,11 +41,11 @@ export default function ProfileForm({ userId, initialData }: ProfileFormProps) {
         const { error } = await supabase
             .from('profiles')
             .update({
-                user_id: userId,
                 username: nickname,
                 bio,
                 birthday: birthday || null
-            }).eq('user_id', userId)
+            })
+            .eq('user_id', userId)
 
         setIsSaving(false)
 

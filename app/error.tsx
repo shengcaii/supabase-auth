@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import Link from 'next/link'
+import { Button } from '@/components/ui/Button'
 
 export default function Error({
     error,
@@ -15,27 +15,25 @@ export default function Error({
     }, [error])
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-center p-4">
+        <div className="min-h-[80vh] flex flex-col items-center justify-center p-4">
             <div className="text-center space-y-4">
-                <h2 className="text-2xl font-bold text-accent">Something went wrong!</h2>
-                <p className="text-muted">
-                    {error?.message || 'An error occurred while processing your request.'}
-                </p>
+                <h2 className="text-2xl font-bold text-accent">Something went wrong</h2>
+                <p className="text-muted">{error.message || 'An error occurred'}</p>
                 <div className="space-x-4">
-                    <button
+                    <Button
                         onClick={reset}
-                        className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark transition-colors"
+                        variant="default"
                     >
                         Try Again
-                    </button>
-                    <Link
+                    </Button>
+                    <Button
                         href="/"
-                        className="bg-surface-2 text-foreground px-4 py-2 rounded-md hover:bg-surface transition-colors"
+                        variant="secondary"
                     >
-                        Home
-                    </Link>
+                        Return Home
+                    </Button>
                 </div>
             </div>
-        </main>
+        </div>
     )
 } 

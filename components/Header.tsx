@@ -10,10 +10,11 @@ import {
     LogoutButton,
     LoginButton
 } from "./buttons/AuthButtons"
+import { User } from "@supabase/supabase-js"
 
 export default function Header() {
     const supabase = createClient()
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState<User | null>(null)
     const router = useRouter()
 
     useEffect(() => {
@@ -23,20 +24,28 @@ export default function Header() {
         })
 
         // Set up auth state change listener
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null)
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
+            if (event === 'SIGNED_IN') {
+                const { data: { user } } = await supabase.auth.getUser()
+                setUser(user)
+                router.refresh()
+            } else if (event === 'SIGNED_OUT') {
+                setUser(null)
+                router.refresh()
+                router.push('/')
+            }
         })
 
-        // Cleanup subscription on component unmount
         return () => {
             subscription.unsubscribe()
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [supabase.auth, router])
 
     const handleSignOut = async () => {
-        await supabase.auth.signOut()
-        router.replace('/')
+        const { error } = await supabase.auth.signOut()
+        if (!error) {
+            setUser(null)
+        }
     }
 
     return (

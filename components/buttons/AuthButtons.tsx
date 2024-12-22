@@ -13,11 +13,11 @@ interface AuthButtonProps {
 
 export function CreateAccountButton({ user }: { user: User | null }) {
     const pathname = usePathname()
-    if (user || pathname === '/login') return null
+    if (user || pathname === '/signup') return null
 
     return (
         <Button
-            href="/login"
+            href="/signup"
             variant="default"
             size="sm"
         >
